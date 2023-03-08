@@ -1,6 +1,10 @@
 import streamlit as st
 import cv2
 import face_recognition
+import os
+
+filename = "Christelle Cornu.jpg"
+nom = os.path.splitext(filename)[0]
 
 #enregistrer les visages connus
 known_image = face_recognition.load_image_file("Christelle Cornu.jpg")
@@ -33,11 +37,11 @@ while True:
         if results[0]:
             # si match, dessiner un rectangle autour du visage et l'identifier
             cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
-            cv2.putText(frame, "Known Person", (left, top - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(frame, nom, (left, top - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         else:
             # sinon dessiner un rectangle rouge autour du visage et l'identifier comme inconnu
             cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-            cv2.putText(frame, "Unknown Person", (left, top - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+            cv2.putText(frame, "Inconnu", (left, top - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
     # afficher l'image résultante
     st.image(frame, channels="BGR")
