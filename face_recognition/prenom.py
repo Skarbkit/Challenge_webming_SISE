@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import math
 from imutils import paths 
+import pickle
 
 
 # Helper
@@ -20,28 +21,13 @@ def face_confidence(face_distance, face_match_threshold=0.6):
 my_path = "C:/Users/hugou/OneDrive/Documents/GitHub/Challenge_webming_SISE/face_recognition/picdata"
 class FaceRecognition:
     my_path = "C:/Users/hugou/OneDrive/Documents/GitHub/Challenge_webming_SISE/face_recognition/picdata"
+    data = pickle.loads(open("face_enc", "rb").read())
     face_locations = []
     face_encodings = []
     face_names = []
-    knownEncodings = []
-    knownNames = []
+    knownEncodings = data["encodings"]
+    knownNames = data["names"]
     process_current_frame = True
-
-    def __init__(self):
-        self.encode_faces()
-
-    def encode_faces(self):
-        for imagePath in list(paths.list_images(my_path)):
-            name = imagePath.split(os.path.sep)[1].split('.')[0]
-            image = cv2.imread(imagePath)
-
-            rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            boxes = face_recognition.face_locations(rgb,model='hog')
-            encodings = face_recognition.face_encodings(rgb, boxes)
-            for encoding in encodings:
-                self.knownEncodings.append(encoding)
-                self.knownNames.append(name)
-        print(self.knownNames)
 
     def run_recognition(self):
         video_capture = cv2.VideoCapture(0)
