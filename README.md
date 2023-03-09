@@ -18,7 +18,7 @@ git clone https://github.com/Skarbkit/Challenge_webming_SISE.git
 ```
 -aller dans un invite de commande -aller dans le chemin du projet
 ```
-cd .../Challenge_webming_SISE/modele_propre/
+cd .../Challenge_webming_SISE/modele_propre
 ```
 
 Installer le fichier requirements.txt :
