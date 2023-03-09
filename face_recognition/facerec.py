@@ -4,6 +4,7 @@ import numpy as np
 import threading
 import face_recognition
 import time
+#import torch
 
 
 # Fonction pour charger les modèles de détection de genre, d'âge et d'émotions
@@ -110,6 +111,7 @@ def detect_face_opti(img, age_model, gender_model):
         # Dessiner un rectangle autour du visage détecté
         cv2.rectangle(img, (left, top), (right, bottom), (255, 0, 0), 2)
 
+
         # Détecter l'âge
         age_model.setInput(blob)
         age_preds = age_model.forward()
@@ -142,8 +144,8 @@ def video_capture(model_age, model_genre):
     num_frames = 0 # Nombre d'images traitées
 
     # Paramètres de la webcam
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    #cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    #cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
     cap.set(cv2.CAP_PROP_FPS, 30)
     fourcc = cv2.VideoWriter_fourcc(*'MJPG')
     cap.set(cv2.CAP_PROP_FOURCC, fourcc)
