@@ -3,19 +3,12 @@ import cv2
 import numpy as np
 import pyaudio
 import wave
+import face_recognition
+import threading
 
-def start_camera():
-    cap = cv2.VideoCapture(0)
-    fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640, 480))
-    return cap, out
-
-def stop_camera(cap, out):
-    cap.release()
-    out.release()
 
 def main():
-    st.title("Webcam et enregistrement vocal")
+    st.title("Enregistrement audio et vidéo")
 
     # Initialiser la webcam
     cap = cv2.VideoCapture(0)
@@ -25,25 +18,32 @@ def main():
     FORMAT = pyaudio.paInt16
     CHANNELS = 1
     RATE = 44100
-    RECORD_SECONDS = 30
+    RECORD_SECONDS = 10
     p = pyaudio.PyAudio()
 
-    col1,col2=st.columns(2)
-
+    audio = st.sidebar.button("Enregistrement audio")
     
-    Audio = st.sidebar.radio(
-        "Enregistrement audio",
-        ("On","Stop"))
-    
-    Video = st.sidebar.radio(
-            "Enregistrement vidéo",
-            ("Enregistrement","Arrêt"))
+    video = st.sidebar.button("Enregistrement vidéo")
 
     col1,col2=st.columns([2,10])
 
+    def detect_face(img):
+        # Convertir l'image en RGB
+        rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+        # Détecter les visages dans l'image
+        faces = face_recognition.face_locations(rgb, model='hog')
+
+        # Pour chaque visage détecté, détecter l'âge, le genre et les émotions
+        for (top, right, bottom, left) in faces:
+            # Dessiner un rectangle autour du visage détecté
+            cv2.rectangle(img, (left, top), (right, bottom), (255, 0, 0), 2)
+
+        return img
+
     with col1:
-        if Audio == "On":
-            st.write("Enregistrement audio en cours...")
+        if audio :
+            st.write("Enregistrement audio d 10 secondes en cours...")
             stream = p.open(format=FORMAT,
                             channels=CHANNELS,
                             rate=RATE,
@@ -59,56 +59,45 @@ def main():
             wf.setframerate(RATE)
             wf.writeframes(b''.join(frames))
             st.audio("enregistrement.wav")
-
-        if Audio == "Stop":
-            stream.stop_stream()
-            stream.close()
-            p.terminate()
-            wf.close()
             st.write("Fin de l'enregistrement audio")
 
-        if Video == "Enregistrement":
-            st.write("Enregistrement vidéo en cours...")
-            st.write("Appuyer sur la lettre A du clavier pour arrêter la webcam puis sur Arrêt")
-            cap = cv2.VideoCapture(0)
-            fourcc = cv2.VideoWriter_fourcc(*'XVID')
-            out = cv2.VideoWriter('output.avi',fourcc, 20.0, (640,480))
-
-            while(True):
-                # Afficher le flux vidéo de la webcam
-                ret, frame = cap.read()
-
-                # Display the resulting frame
-                cv2.imshow('frame',frame)
-                out.write(frame)
-            # Arrêter la boucle en appuyant sur la touche 'q'
-                if cv2.waitKey(1) & 0xFF == ord('q'): 
-                    break
-
-        if Video == "Arrêt":
-            # Libérer la webcam et fermer les fenêtres
-            cap.release()
-            out.release()
-            cv2.destroyAllWindows()
-            st.write("Fin de l'enregistrement vidéo")
-
     with col2:
-        if Video == "Enregistrement":
-            cap, out = start_camera()
-            while(cap.isOpened()):
+        if video :
+            cap = cv2.VideoCapture(0) # 0 pour la webcam intégrée, 1 pour une webcam externe
+            stframe = st.empty() # Créer un espace vide pour afficher l'image
+
+            # Paramètres de la webcam
+            # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+            # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+            cap.set(cv2.CAP_PROP_FPS, 60)
+            fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+            cap.set(cv2.CAP_PROP_FOURCC, fourcc)
+            out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640,480)) # Créer l'objet VideoWriter
+
+
+            count = 0
+            while True:
+                count += 1
                 ret, frame = cap.read()
-                if ret == True:
+                if ret:
+                    frame = cv2.flip(frame, 1)
+
+                    # Appeler la fonction de détection de visage dans un thread séparé seulement une image sur deux pour accélérer le traitement
+                    #if count % 2 == 0:
+                    thread = threading.Thread(target=detect_face, args=(frame))
+                    thread.start() # Lancer le thread
+                    thread.join() # Attendre la fin du thread pour continuer
+
+                    # Afficher l'image dans Streamlit
+                    stframe.image(frame, channels="BGR")
+
+                    # Écrire l'image dans le fichier vidéo
                     out.write(frame)
-                    cv2.imshow('frame',frame)
-                    if cv2.waitKey(1) & 0xFF == ord('q'):
-                        break
-                else:
-                    break
             
-        if Video =="Arrêt" :
-            stop_camera(cap, out)
-            cv2.destroyAllWindows()
-            st.write("Fin de l'enregistrement")
+                    if cv2.waitKey(1) == ord('a'):
+                        break
+        cap.release()
+        cv2.destroyAllWindows()
 
 
 

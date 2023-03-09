@@ -29,7 +29,7 @@ def record_video():
     global stop_threads
     # .avi et fichier de sortie
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640, 480))
+    out = cv2.VideoWriter('hello.avi', fourcc, 20.0, (640, 480))
 
     while not stop_threads:
         ret, frame = video_capture.read()
@@ -55,7 +55,7 @@ record_thread = threading.Thread(target=record_video)
 
 while True:
     with sr.Microphone() as source:
-        print("Dit un truc mon reuf")
+        print("que voulez-vous faire ?")
         audio = r.listen(source)
 
     try:

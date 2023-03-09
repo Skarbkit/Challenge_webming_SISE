@@ -54,20 +54,51 @@ def capture_video():
 
             # Afficher l'image dans Streamlit
             stframe.image(frame, channels="BGR")
-            #out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640, 480))
-            
         #if cv2.waitKey(1) == ord('a'):
            # break
 
+def record_video():
+
+    cap = cv2.VideoCapture(0) # 0 pour la webcam intégrée, 1 pour une webcam externe
+    stframe = st.empty() # Créer un espace vide pour afficher l'image
+
+    cap.set(cv2.CAP_PROP_FPS, 60)
+    fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+    cap.set(cv2.CAP_PROP_FOURCC, fourcc)
+    out = cv2.VideoWriter('record.avi',fourcc, 20.0, (640,480))
+
+    count = 0
+    while True:
+        count += 1
+        ret, frame = cap.read()
+        if ret:
+            frame = cv2.flip(frame, 1)
+
+            # Appeler la fonction de détection de visage dans un thread séparé seulement une image sur deux pour accélérer le traitement
+            #if count % 2 == 0:
+            thread = threading.Thread(target=detect_face, args=(frame))
+            thread.start() # Lancer le thread
+            thread.join() # Attendre la fin du thread pour continuer
+
+            # Afficher l'image dans Streamlit
+            stframe.image(frame, channels="BGR")
+            out.write(frame) 
+        else:
+            break
+        if st.button("Arrêter l'enregistrement"):
+            is_recording = False     
+        #if cv2.waitKey(1) == ord('a'):
+           # break
     #cap.release()
     #cv2.destroyAllWindows()
-        return(cap)
+        return(out)
+
 
 def start_stop_camera():
     while True:
         r = sr.Recognizer()
         with sr.Microphone() as source:
-            st.write("Dites 'Démarrer' ou 'Arrêter' pour contrôler la caméra. Stop arrête la reconnaissance vocale.")
+            st.write("Dites 'Démarrer' pour démarrer la caméra. Stop arrête la reconnaissance vocale.")
             audio = r.listen(source)
             try:
                 text = r.recognize_google(audio, language='fr-FR')
@@ -77,15 +108,14 @@ def start_stop_camera():
                     capture_video()
                 elif "arrêter" in text.lower():
                     st.write("Arrêt de la caméra...")
-                    #cap.release()
+                    #stop_camera()
                     #cap.out.release()
-                if "stop" in text.lower():
-                    print("Arrêt de la reconnaissance vocale.")
-                    break
+                elif "audio" in text.lower():
+                   record_video()
                 else:
                     st.write("Commande non reconnue.")
-            except sr.UnknownValueError:
-                st.write("Je n'ai pas compris. Veuillez réessayer.")
+            except "stop" in text.lower():
+                st.write("Arrêt de la reconnaissance vocale.")
         
 
 def main():
