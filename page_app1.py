@@ -3,6 +3,8 @@ import cv2
 import numpy as np
 import pyaudio
 import wave
+import speech_recognition as sr
+import threading
 
 def start_camera():
     cap = cv2.VideoCapture(0)
@@ -16,6 +18,10 @@ def stop_camera(cap, out):
 
 def main():
     st.title("Webcam et enregistrement vocal")
+
+    with sr.Microphone() as source:
+        print("Dit un truc mon reuf")
+        audio = r.listen(source)
 
     # Initialiser la webcam
     cap = cv2.VideoCapture(0)
@@ -31,9 +37,9 @@ def main():
     col1,col2=st.columns(2)
 
     
-    Audio = st.sidebar.radio(
-        "Enregistrement audio",
-        ("On","Stop"))
+    # Audio = st.sidebar.radio(
+    #     "Enregistrement audio",
+    #     ("On","Stop"))
     
 
     col1,col2=st.columns([2,10])
