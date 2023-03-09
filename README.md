@@ -36,7 +36,7 @@ cd .../Challenge_webming_SISE
 docker build -t nomchoisidelimage .
 ```
 Dans un invite de commande, run l'image:
-
+```
 docker run nomchoisidelimage 
 
 Les liens url ne sont pas valides car l'application n'est pas hébergée en ligne, il faut ouvrir un nouvel onglet et aller à l'url localhost:8501
