@@ -43,7 +43,7 @@ def main():
 
     with col1:
         if audio :
-            st.write("Enregistrement audio d 10 secondes en cours...")
+            st.write("Enregistrement audio de 10 secondes en cours...")
             stream = p.open(format=FORMAT,
                             channels=CHANNELS,
                             rate=RATE,
@@ -65,7 +65,7 @@ def main():
         if video :
             cap = cv2.VideoCapture(0) # 0 pour la webcam intégrée, 1 pour une webcam externe
             stframe = st.empty() # Créer un espace vide pour afficher l'image
-
+            st.write("Enregistrement vidéo en cours..., pour arrêter l'enregistrement, appuyer sur le bouton 'stop'")
             # Paramètres de la webcam
             # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
             # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
@@ -93,6 +93,9 @@ def main():
 
                     # Écrire l'image dans le fichier vidéo
                     out.write(frame)
+
+                    # Affichez la vidéo dans Streamlit
+                    st.video(out)
             
                     if cv2.waitKey(1) == ord('a'):
                         break
