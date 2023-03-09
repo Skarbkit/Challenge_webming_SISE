@@ -1,7 +1,6 @@
 # Challenge Web mining SISE
 
-Ce projet consistait à effectuer une reconnaissance faciale et identification sur des vidéos WEBCAM des étudiants du Master SISE
-avec commande vocale avec le choix d'une application streamlit.
+Ce projet consistait à effectuer une reconnaissance faciale et identification sur des vidéos WEBCAM des étudiants du Master SISE avec possibilité d'enregistrement vocale dans une application streamlit.
 
 ![](image/detect_visage.png)
 
