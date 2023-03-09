@@ -35,10 +35,6 @@ def main():
         "Enregistrement audio",
         ("On","Stop"))
     
-    #Video = st.sidebar.radio(
-     #       "Enregistrement vidéo",
-      #      ("Enregistrement","Arrêt"))
-    #Video = st.sidebar.button("Allumer la caméra")
 
     col1,col2=st.columns([2,10])
 
@@ -77,6 +73,7 @@ def main():
             wf.writeframes(b''.join(frames))
             wf.close()
             st.audio("enregistrement.wav")
+            st.write(f"Enregistrement audio terminé. Fichier enregistré sous enregistrement.wav")
 
     with col2:
         # Paramètres de la webcam
@@ -89,7 +86,7 @@ def main():
         filename = "recording.avi"
         out = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc(*'XVID'), fps, (frame_width, frame_height))
 
-        # Boutons pour démarrer/arrêter l'enregistrement
+        # Bouton pour démarrer l'enregistrement
         if st.sidebar.button("Démarrer l'enregistrement"):
             st.write("Enregistrement en cours...")
             st.write("Appuyer sur la lettre Q du clavier pour arrêter la webcam")
@@ -104,36 +101,11 @@ def main():
             cap.release()
             out.release()
             cv2.destroyAllWindows()
-            st.write(f"Enregistrement terminé. Fichier enregistré sous {filename}.")
+            st.write(f"Enregistrement terminé. Fichier enregistré sous {filename}")
 
         #if st.sidebar.button("Arrêter l'enregistrement"):
          #   st.stop()
 
-
-    # with col2:
-    #     if Video == "Enregistrement":
-    #     if Video:
-    #         st.write("Enregistrement vidéo en cours...")
-    #         st.write("Appuyer sur la lettre Q du clavier pour arrêter la webcam puis sur Arrêt")
-    #         fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    #         cap, out = start_camera()
-    #         while(cap.isOpened()):
-    #             ret, frame = cap.read()
-    #             if ret == True:
-    #                 out.write(frame)
-    #                 cv2.imshow('frame',frame)
-    #                 if cv2.waitKey(1) & 0xFF == ord('q'):
-    #                     break
-    #             else:
-    #                 break
-    #         stop_camera(cap, out)
-    #         cv2.destroyAllWindows()
-    #         st.write("Fin de l'enregistrement")
-            
-    #     if Video =="Arrêt" :
-    #        stop_camera(cap, out)
-    #        cv2.destroyAllWindows()
-    #        st.write("Fin de l'enregistrement")
 
 
 
