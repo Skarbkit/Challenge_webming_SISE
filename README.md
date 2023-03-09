@@ -31,7 +31,7 @@ python -m streamlit run Accueil.py
 ```
 Pour lancer l'appli avec docker:
 ```
-cd .../Challenge_webming_SISE/modele_propre/
+cd .../Challenge_webming_SISE/modele_propre
 -construire l'image docker:
 ```
 docker build -t nomchoisidelimage .
