@@ -8,7 +8,7 @@ avec commande vocale avec le choix d'une application streamlit.
 ## Description du dépôt Git:
 Le dossier contient 
 
-## Afin de lancer l'application il faut :
+**Afin de lancer l'application il faut :**
 
 Créer un environnement et réaliser un git clone du dépôt dans un dossier de votre choix.
 
