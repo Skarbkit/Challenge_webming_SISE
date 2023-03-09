@@ -1,12 +1,19 @@
+import streamlit as st
+import cv2
+import numpy as np
+import pyaudio
+import wave
+import face_recognition
+import threading
 import cv2
 import streamlit as st
 import numpy as np
 import threading
-import face_recognition
 import time
 import pickle
 from keras.models import load_model
-#import torch
+
+
 
 def load_known_data():
     data = pickle.loads(open("face_enc", "rb").read())
@@ -80,7 +87,6 @@ def emotion_detection( resized, emotion_model):
     # Obtenir le nom de l'émotion prédite
     emotion_name = emotions[emotion_index]
     return emotion_name
-
 
 def detect_face_opti(img, age_model, gender_model,emotion_model, known_names, known_encodings):
     # Convertir l'image en RGB
@@ -170,76 +176,3 @@ def detect_face_opti(img, age_model, gender_model,emotion_model, known_names, kn
 
 
     return img
-
-
-# Fonction pour la lecture en continu de la webcam
-def video_capture(model_age, model_genre,emotion_model,know_names,known_encodings):
-    # Charger les modèles
-    model_age = model_age
-    model_genre = model_genre
-    emotion_model = emotion_model
-    known_names = know_names
-    known_encodings = known_encodings
-
-
-
-
-    cap = cv2.VideoCapture(0) # 0 pour la webcam intégrée, 1 pour une webcam externe
-    stframe = st.empty() # Créer un espace vide pour afficher l'image
-    start_time = time.time() # Début du chronomètre
-    num_frames = 0 # Nombre d'images traitées
-
-    # Paramètres de la webcam
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-    cap.set(cv2.CAP_PROP_FPS, 30)
-    #cap.set(cv2.CAP_PROP_FOURCC, fourcc)
-
-    count = 0
-    while True:
-        count += 1
-        ret, frame = cap.read()
-        if ret:
-            frame = cv2.flip(frame, 1)
-
-            # Appeler la fonction de détection de visage dans un thread séparé seulement une image sur deux pour accélérer le traitement
-            #if count % 2 == 0:
-            thread = threading.Thread(target=detect_face_opti, args=(frame,model_age,model_genre,emotion_model, know_names, known_encodings))
-            thread.start() # Lancer le thread
-            thread.join() # Attendre la fin du thread pour continuer
-             # Attendre la fin du thread pour continuer
-
-            # Afficher le nombre d'images traitées par seconde
-            num_frames += 1
-            elapsed_time = time.time() - start_time
-            fps = num_frames / elapsed_time
-            cv2.putText(frame, "IPS: {:.2f}".format(fps), (10, 30),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
-            
-
-            # Afficher l'image dans Streamlit
-            stframe.image(frame, channels="BGR")
-            
-        if cv2.waitKey(1) == ord('a'):
-            break
-            
-    cap.release()
-    cv2.destroyAllWindows()
-
-# Lancer l'application
-def main():
-    st.title("Détection de visage en temps réel")
-    st.text("Caméra en cours d'utilisation...")
-
-    # Charger les modèles
-    model_age, model_genre, emotion_model = load_all_models()
-    known_names, known_encodings = load_known_data()
-
-
-    video_capture(model_age, model_genre,emotion_model, known_names, known_encodings)
-
-if __name__ == '__main__':
-    main()
-            
-
- 
