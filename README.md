@@ -27,7 +27,7 @@ $pip install -r requirements.txt
 ```
 Lancer l'application Streamlit :
 ```
-python -m streamlit run Accueil.py
+python -m streamlit run application.py
 ```
 Pour lancer l'appli avec docker:
 ```
