@@ -16,6 +16,10 @@ Dans la console bash :
 ```
 git clone https://github.com/Skarbkit/Challenge_webming_SISE.git
 ```
+-aller dans un invite de commande -aller dans le chemin du projet
+```
+cd .../Challenge_webming_SISE/modele_propre/
+```
 
 Installer le fichier requirements.txt :
 ```
@@ -26,11 +30,8 @@ Lancer l'application Streamlit :
 python -m streamlit run Accueil.py
 ```
 Pour lancer l'appli avec docker:
-
--aller dans un invite de commande -aller dans le chemin du projet
 ```
-cd .../Challenge_webming_SISE
-```
+cd .../Challenge_webming_SISE/modele_propre/
 -construire l'image docker:
 ```
 docker build -t nomchoisidelimage .
