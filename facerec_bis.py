@@ -4,19 +4,14 @@ import numpy as np
 import threading
 import face_recognition
 import os
+import pickle
 
-#sélection du directory de travail et liste vides pour stockage photos et noms
-known_faces = []
-known_names = []
-known_dir = "C:/Users/cornuch/Documents/GitHub/Challenge_webming_SISE/photos/"
 
-# Charger toutes les images connues dans le dossier 'known_faces'
-for file in os.listdir(known_dir):
-    img = face_recognition.load_image_file(os.path.join(known_dir, file))
-    # Extraire l'encodage du visage de chaque image
-    encoding = face_recognition.face_encodings(img)[0]
-    known_faces.append(encoding)
-    known_names.append(file.split('.')[0])
+with open("storage_photo", "rb") as f:
+    data = pickle.load(f)
+    
+known_faces =data["encodings"]
+known_names = data["names"]
 
 # Fonction pour la détection de visage, d'âge, de genre et d'émotions
 def detect_face(img):

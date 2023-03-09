@@ -40,6 +40,6 @@ for imagePath in imagePaths:
 data = {"encodings": knownEncodings, "names": knownNames}
 #use pickle to save data into a file for later use
 
-f = open("face_enc", "wb")
+f = open("encode_photo", "wb")
 f.write(pickle.dumps(data))
 f.close()
