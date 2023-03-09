@@ -52,27 +52,6 @@ def main():
                     cap.set(cv2.CAP_PROP_FPS, 60)
                     fourcc = cv2.VideoWriter_fourcc(*'MJPG')
                     cap.set(cv2.CAP_PROP_FOURCC, fourcc)
-
-                    count = 0
-                    while True:
-                        count += 1
-                        ret, frame = cap.read()
-                        if ret:
-                            frame = cv2.flip(frame, 1)
-
-                            # Appeler la fonction de détection de visage dans un thread séparé seulement une image sur deux pour accélérer le traitement
-                            #if count % 2 == 0:
-                            thread = threading.Thread(target=detect_face, args=(frame))
-                            thread.start() # Lancer le thread
-                            thread.join() # Attendre la fin du thread pour continuer
-
-                            # Afficher l'image dans Streamlit
-                            stframe.image(frame, channels="BGR")    
-                elif "arrêter" in text.lower():
-                    st.write("Arrêt de la caméra...")
-                    #stop_camera()
-                    cap.release()
-                elif "audio" in text.lower():
                     out = cv2.VideoWriter('record.avi',fourcc, 20.0, (640,480))
 
                     count = 0
@@ -89,20 +68,22 @@ def main():
                             thread.join() # Attendre la fin du thread pour continuer
 
                             # Afficher l'image dans Streamlit
-                            stframe.image(frame, channels="BGR")
-                            out.write(frame) 
-                        else:
+                            stframe.image(frame, channels="BGR") 
+                            out.write(frame)    
+                        #else:
+                            #st.write("Commande non reconnue.")
+                        elif "stop" in text.lower():
+                            cap.release()
+                            cv2.destroyAllWindows()
                             break
-                        if st.button("Arrêter l'enregistrement"):
-                            is_recording = False     
-                        else:
-                            st.write("Commande non reconnue.")
-            except "stop" in text.lower():
-                st.write("Arrêt de la reconnaissance vocale.")
-                break
-    if stop_button:
+            except sr.UnknownValueError:
+                st.write("répète on comprend pas")
+            except sr.RequestError as e:
+                st.write("Impossible d'effectuer la requête ; {0}".format(e))
+            
+        if stop_button:
         # Stop the webcam video stream
-        cap.release()
+            cap.release()
 
 
 if __name__ == "__main__":
