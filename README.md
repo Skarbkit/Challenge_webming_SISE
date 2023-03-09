@@ -2,7 +2,7 @@
 
 Ce projet consistait à effectuer une reconnaissance faciale et identification sur des vidéos WEBCAM des étudiants du Master SISE avec commande vocale dans une application streamlit.
 
-![](image/detect_2_visage.png)
+![](image/detect_2_visages.png)
 
 ## Description du dépôt Git
 Le dossier contient modele_propre contient tous les modèles pré-entraînés, le fichier des photos encodées ainsi que le fichier contenant toutes les fonctions nécessaires pour l'application streamlit.
