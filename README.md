@@ -15,7 +15,7 @@ Créer un environnement et réaliser un git clone du dépôt dans un dossier de 
 Dans la console bash :
 
 ```
-git clone https://github.com/Skarbkit/Challenge_webming_SISE.git
+git clone ![split](https://https://github.com/Skarbkit/Challenge_webming_SISE.git)
 ```
 
 Installer le fichier requirements.txt :
