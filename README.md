@@ -52,3 +52,5 @@ Les liens url ne sont pas valides car l'application n'est pas hébergée en lign
 Lorsque vous avez lancer l'application streamlit, vous pouvez enregistrer un audio de 10 secondes. Vous pouvez directement écouter votre enregistrement sur l'application.
 
 De plus, vous pouvez aussi lancer l'enregistrement d'une vidéo que vous stopper avec le bouton stop situé en haut à droite de la fenêtre de l'application. Votre enregistrement vidéo est ensuite disponible dans votre dossier. 
+
+Dans l'application_res, vous pouvez en plus modifier la résolution.
