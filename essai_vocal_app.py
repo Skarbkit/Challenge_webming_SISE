@@ -4,9 +4,13 @@ import speech_recognition as sr
 import threading
 import face_recognition
 import pyaudio
+import time
 
 # Create a button to stop the webcam
 stop_button = st.sidebar.button("Stop Webcam")
+
+# Création d'un contrôle de valeur dans la barre latérale
+temps = st.sidebar.slider("Sélectionnez un temps d'enregistrement en secondes", 0, 60, 5)
 
 def detect_face(img):
     # Convertir l'image en RGB
@@ -36,7 +40,8 @@ def main():
     while True: 
         r = sr.Recognizer()
         with sr.Microphone() as source:
-            st.write("Dites 'Démarrer' pour démarrer la caméra. Stop arrête la reconnaissance vocale.")
+            st.write("Dites 'Démarrer' pour démarrer la caméra.")
+            r.adjust_for_ambient_noise(source)
             audio = r.listen(source)
             try:
                 text = r.recognize_google(audio, language='fr-FR')
@@ -69,17 +74,18 @@ def main():
 
                             # Afficher l'image dans Streamlit
                             stframe.image(frame, channels="BGR") 
-                            out.write(frame)    
-                        #else:
-                            #st.write("Commande non reconnue.")
-                        elif "stop" in text.lower():
-                            cap.release()
-                            cv2.destroyAllWindows()
+                            out.write(frame)  
+
+                        if cap.get(cv2.CAP_PROP_POS_MSEC) >= temps*1000: 
+                            st.write("Fin de l'enregistrement")
                             break
+                        cap.release()
+                        cv2.destroyAllWindows() 
+                else:
+                    st.write("Commande non reconnue.")
+                    break
             except sr.UnknownValueError:
                 st.write("répète on comprend pas")
-            except sr.RequestError as e:
-                st.write("Impossible d'effectuer la requête ; {0}".format(e))
             
         if stop_button:
         # Stop the webcam video stream
