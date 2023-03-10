@@ -7,6 +7,10 @@ Ce projet consistait à effectuer une reconnaissance faciale et identification s
 ## Description du dépôt Git
 Le dossier contient modele_propre contient tous les modèles pré-entraînés, le fichier des photos encodées ainsi que le fichier contenant toutes les fonctions nécessaires pour l'application streamlit.
 
+Le dossier audio contient des essais sur les commandes vocales et leur intégration dans streamlit.
+
+Le dossier image contient des images des rendus visuels de l'application.
+
 **Afin de lancer l'application il faut :**
 
 Créer un environnement et réaliser un git clone du dépôt dans un dossier de votre choix.
