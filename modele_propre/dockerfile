@@ -1,7 +1,7 @@
 FROM python:3.9
 
 RUN mkdir -p /application
-WORKDIR Streamlit
+WORKDIR /modele_propre
 
 COPY requirements.txt ./requirements.txt
 RUN pip install -U pip
