@@ -88,7 +88,7 @@ def emotion_detection( resized, emotion_model):
     emotion_name = emotions[emotion_index]
     return emotion_name
 
-def detect_face_opti(img, age_model, gender_model,emotion_model, known_names, known_encodings):
+def detect_face_opti(img, age_model, gender_model,emotion_model, known_names, known_encodings,coef=5):
     # Convertir l'image en RGB
     rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -96,7 +96,7 @@ def detect_face_opti(img, age_model, gender_model,emotion_model, known_names, kn
     
     emotion_name = emotion_detection(resized, emotion_model)
     # Réduire la résolution de l'image pour accélérer le traitement
-    small_rgb = cv2.resize(rgb, (0, 0), fx=0.20, fy=0.20)
+    small_rgb = cv2.resize(rgb, (0, 0), fx=1/coef, fy=1/coef)
 
     # Détecter les visages dans l'image
     
@@ -112,10 +112,10 @@ def detect_face_opti(img, age_model, gender_model,emotion_model, known_names, kn
     # Pour chaque visage détecté, détecter l'âge et le genre
     for (top, right, bottom, left), name in zip(faces, names):
         # Mettre à l'échelle les coordonnées des visages détectés pour correspondre à l'image d'origine
-        top *= 5
-        right *= 5
-        bottom *= 5
-        left *= 5
+        top *= coef
+        right *= coef
+        bottom *= coef
+        left *= coef
         # Dans la recherche de l'optimisation de la fonction, on a réduit en 1/5 la résolution de l'image
         # Il faut donc multiplier les coordonnées des visages détectés par 5 pour les remettre à l'échelle
         # Au delà de 5 on perd en précision et on ne détecte plus les visages pour des caméras de faible résolution
