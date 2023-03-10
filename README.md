@@ -1,8 +1,8 @@
 # Challenge Web mining SISE
 
-Ce projet consistait à effectuer une reconnaissance faciale et identification sur des vidéos WEBCAM des étudiants du Master SISE avec possibilité d'enregistrement vocale dans une application streamlit.
+Ce projet consistait à effectuer une reconnaissance faciale et identification sur des vidéos WEBCAM des étudiants du Master SISE avec commande vocale dans une application streamlit.
 
-![](image/detect_visage.png)
+![](image/detect_2_visages.png)
 
 ## Description du dépôt Git
 Le dossier contient modele_propre contient tous les modèles pré-entraînés, le fichier des photos encodées ainsi que le fichier contenant toutes les fonctions nécessaires pour l'application streamlit.
@@ -16,6 +16,10 @@ Dans la console bash :
 ```
 git clone https://github.com/Skarbkit/Challenge_webming_SISE.git
 ```
+-aller dans un invite de commande -aller dans le chemin du projet
+```
+cd .../Challenge_webming_SISE/modele_propre
+```
 
 Installer le fichier requirements.txt :
 ```
@@ -23,22 +27,20 @@ $pip install -r requirements.txt
 ```
 Lancer l'application Streamlit :
 ```
-python -m streamlit run Accueil.py
+python -m streamlit run application.py
 ```
 Pour lancer l'appli avec docker:
-
--aller dans un invite de commande -aller dans le chemin du projet
 ```
-cd .../Challenge_OPSIE-SISE
+cd .../Challenge_webming_SISE/modele_propre
 ```
 -construire l'image docker:
 ```
 docker build -t nomchoisidelimage .
 ```
 Dans un invite de commande, run l'image:
-
+```
 docker run nomchoisidelimage 
-
+```
 Les liens url ne sont pas valides car l'application n'est pas hébergée en ligne, il faut ouvrir un nouvel onglet et aller à l'url localhost:8501
 
 ## Comment utiliser l'application
